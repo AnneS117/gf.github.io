@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemie Grundlagen – Atombau</title>
+    <style>
+        :root {
+            --primary: #2c5282;
+            --secondary: #4a90a4;
+            --accent: #48bb78;
+            --warning: #ed8936;
+            --light-bg: #f7fafc;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.7;
+            color: #2d3748;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #fff;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom: 3px solid var(--primary);
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header .subtitle {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+
+        /* Inhaltsverzeichnis */
+        .toc {
+            background: var(--light-bg);
+            border-radius: 8px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .toc h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            padding: 0.4rem 0;
+        }
+
+        .toc a {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        /* Kapitel */
+        .chapter {
+            margin-bottom: 4rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chapter h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .chapter h3 {
+            color: var(--secondary);
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem;
+        }
+
+        /* Textplatzhalter */
+        .content-placeholder {
+            background: #fafafa;
+            border: 2px dashed #cbd5e0;
+            border-radius: 6px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            color: #a0aec0;
+            font-style: italic;
+            min-height: 150px;
+        }
+
+        .content-placeholder::before {
+            content: "📝 ";
+        }
+
+        /* Merksatz */
+        .merksatz {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+            border-left: 5px solid var(--secondary);
+            border-radius: 0 8px 8px 0;
+            padding: 1.2rem 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .merksatz::before {
+            content: "💡 Merke";
+            display: block;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .merksatz p {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .merksatz-placeholder {
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        /* Aufgabenbox */
+        .aufgabe {
+            background: #fffaf0;
+            border: 2px solid var(--warning);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .aufgabe::before {
+            content: "✏️ Aufgabe";
+            display: block;
+            font-weight: 700;
+            color: #c05621;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .aufgabe-nummer {
+            display: inline-block;
+            background: var(--warning);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: 700;
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .aufgabe-text {
+            margin: 0.5rem 0;
+        }
+
+        .aufgabe-loesung {
+            background: #feebc8;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .aufgabe-loesung.show {
+            display: block;
+        }
+
+        .btn-loesung {
+            background: var(--warning);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .btn-loesung:hover {
+            background: #dd6b20;
+        }
+
+        /* Multiple Choice */
+        .quiz {
+            background: #f0fff4;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .quiz::before {
+            content: "🎯 Schnelltest";
+            display: block;
+            font-weight: 700;
+            color: #276749;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .quiz-frage {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-optionen {
+            list-style: none;
+        }
+
+        .quiz-optionen li {
+            margin: 0.5rem 0;
+        }
+
+        .quiz-optionen label {
+            display: flex;
+            align-items: center;
+            padding: 0.6rem 1rem;
+            background: white;
+            border: 1px solid #c6f6d5;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-optionen label:hover {
+            background: #c6f6d5;
+        }
+
+        .quiz-optionen input[type="radio"] {
+            margin-right: 0.8rem;
+            accent-color: var(--accent);
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 4px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .quiz-feedback.correct {
+            background: #c6f6d5;
+            color: #276749;
+            display: block;
+        }
+
+        .quiz-feedback.incorrect {
+            background: #fed7d7;
+            color: #c53030;
+            display: block;
+        }
+
+        .btn-check {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            margin-top: 0.8rem;
+            transition: background 0.2s;
+        }
+
+        .btn-check:hover {
+            background: #38a169;
+        }
+
+        /* Link-Box */
+        .links {
+            background: #faf5ff;
+            border: 2px solid #9f7aea;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .links::before {
+            content: "🔗 Weiterführende Links";
+            display: block;
+            font-weight: 700;
+            color: #6b46c1;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .links ul {
+            list-style: none;
+        }
+
+        .links li {
+            padding: 0.4rem 0;
+        }
+
+        .links a {
+            color: #805ad5;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .links a::before {
+            content: "→";
+        }
+
+        /* Definition */
+        .definition {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .definition-term {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .definition-text {
+            margin-top: 0.5rem;
+            color: #4a5568;
+        }
+
+        /* Bild-Platzhalter */
+        .bild-placeholder {
+            background: #edf2f7;
+            border: 2px dashed #a0aec0;
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            color: #718096;
+        }
+
+        .bild-placeholder::before {
+            content: "🖼️";
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tabelle */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.8rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: var(--light-bg);
+        }
+
+        /* Formelbox */
+        .formel {
+            background: #1a202c;
+            color: #f7fafc;
+            padding: 1.2rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border);
+            text-align: center;
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        /* Print-Optimierung */
+        @media print {
+            body {
+                padding: 0;
+            }
+            
+            .btn-loesung, .btn-check {
+                display: none;
+            }
+            
+            .aufgabe-loesung {
+                display: block !important;
+            }
+            
+            .quiz-feedback {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Atombau</h1>
+        <p class="subtitle">Grundlagenfach Chemie</p>
+    </header>
+
+    <!-- Inhaltsverzeichnis -->
+    <nav class="toc">
+        <h2>Inhaltsverzeichnis</h2>
+        <ul>
+            <li><a href="#kap1">1. Einführung in den Atombau</a></li>
+            <li><a href="#kap2">2. Elementarteilchen</a></li>
+            <li><a href="#kap3">3. Das Bohrsche Atommodell</a></li>
+            <li><a href="#kap4">4. Elektronenkonfiguration</a></li>
+            <li><a href="#kap5">5. Das Periodensystem</a></li>
+        </ul>
+    </nav>
+
+    <!-- Kapitel 1 -->
+    <section class="chapter" id="kap1">
+        <h2>1. Einführung in den Atombau</h2>
+        
+        <div class="content-placeholder">
+            Hier Text zur Geschichte des Atombegriffs einfügen (Demokrit, Dalton, etc.)
+        </div>
+
+        <div class="definition">
+            <p class="definition-term">Atom</p>
+            <p class="definition-text">[Definition hier einfügen]</p>
+        </div>
+
+        <div class="content-placeholder">
+            Weiterer einführender Text zum Aufbau der Materie...
+        </div>
+
+        <div class="merksatz">
+            <p class="merksatz-placeholder">[Zusammenfassender Merksatz hier einfügen]</p>
+        </div>
+
+        <div class="bild-placeholder">
+            Abbildung: Historische Entwicklung der Atommodelle
+        </div>
+
+        <!-- Aufgabe -->
+        <div class="aufgabe">
+            <p class="aufgabe-text">
+                <span class="aufgabe-nummer">1</span>
+                [Aufgabenstellung hier einfügen]
+            </p>
+            <button class="btn-loesung" onclick="toggleLoesung(this)">Lösung anzeigen</button>
+            <div class="aufgabe-loesung">
+                [Lösung hier einfügen]
+            </div>
+        </div>
+
+        <!-- Multiple Choice -->
+        <div class="quiz" data-correct="b">
+            <p class="quiz-frage">[Multiple-Choice-Frage hier einfügen]</p>
+            <ul class="quiz-optionen">
+                <li>
+                    <label>
+                        <input type="radio" name="quiz1" value="a">
+                        [Option A]
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="quiz1" value="b">
+                        [Option B - korrekte Antwort]
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="quiz1" value="c">
+                        [Option C]
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="quiz1" value="d">
+                        [Option D]
+                    </label>
+                </li>
+            </ul>
+            <button class="btn-check" onclick="checkQuiz(this)">Überprüfen</button>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="links">
+            <ul>
+                <li><a href="#">[Link-Beschreibung 1]</a></li>
+                <li><a href="#">[Link-Beschreibung 2]</a></li>
+                <li><a href="#">[Video: Link-Beschreibung 3]</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Kapitel 2 -->
+    <section class="chapter" id="kap2">
+        <h2>2. Elementarteilchen</h2>
+        
+        <h3>2.1 Protonen, Neutronen und Elektronen</h3>
+        
+        <div class="content-placeholder">
+            Text zu den drei Elementarteilchen einfügen...
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Teilchen</th>
+                    <th>Ladung</th>
+                    <th>Masse (u)</th>
+                    <th>Ort im Atom</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Proton</td>
+                    <td>[+1]</td>
+                    <td>[≈1]</td>
+                    <td>[Atomkern]</td>
+                </tr>
+                <tr>
+                    <td>Neutron</td>
+                    <td>[0]</td>
+                    <td>[≈1]</td>
+                    <td>[Atomkern]</td>
+                </tr>
+                <tr>
+                    <td>Elektron</td>
+                    <td>[-1]</td>
+                    <td>[≈0]</td>
+                    <td>[Hülle]</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="merksatz">
+            <p class="merksatz-placeholder">[Merksatz zu Elementarteilchen hier einfügen]</p>
+        </div>
+
+        <h3>2.2 Ordnungszahl und Massenzahl</h3>
+
+        <div class="content-placeholder">
+            Text zu Ordnungszahl, Massenzahl und Isotopen...
+        </div>
+
+        <div class="formel">
+            [Formel/Notation hier einfügen, z.B.: A = Z + N]
+        </div>
+
+        <div class="definition">
+            <p class="definition-term">Isotope</p>
+            <p class="definition-text">[Definition hier einfügen]</p>
+        </div>
+
+        <div class="merksatz">
+            <p class="merksatz-placeholder">[Merksatz zu Ordnungszahl/Massenzahl hier einfügen]</p>
+        </div>
+
+        <div class="aufgabe">
+            <p class="aufgabe-text">
+                <span class="aufgabe-nummer">2</span>
+                [Aufgabe zu Elementarteilchen/Isotopen hier einfügen]
+            </p>
+            <button class="btn-loesung" onclick="toggleLoesung(this)">Lösung anzeigen</button>
+            <div class="aufgabe-loesung">
+                [Lösung hier einfügen]
+            </div>
+        </div>
+
+        <div class="quiz" data-correct="c">
+            <p class="quiz-frage">[Frage zu Ordnungszahl/Massenzahl]</p>
+            <ul class="quiz-optionen">
+                <li><label><input type="radio" name="quiz2" value="a">[Option A]</label></li>
+                <li><label><input type="radio" name="quiz2" value="b">[Option B]</label></li>
+                <li><label><input type="radio" name="quiz2" value="c">[Option C - korrekt]</label></li>
+                <li><label><input type="radio" name="quiz2" value="d">[Option D]</label></li>
+            </ul>
+            <button class="btn-check" onclick="checkQuiz(this)">Überprüfen</button>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="links">
+            <ul>
+                <li><a href="#">[Simulation: Atombau]</a></li>
+                <li><a href="#">[Übungsblatt Isotope]</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Kapitel 3 -->
+    <section class="chapter" id="kap3">
+        <h2>3. Das Bohrsche Atommodell</h2>
+        
+        <div class="content-placeholder">
+            Einführung zum Bohrschen Modell und seinen Postulaten...
+        </div>
+
+        <div class="bild-placeholder">
+            Abbildung: Bohrsches Atommodell mit Schalen
+        </div>
+
+        <div class="content-placeholder">
+            Erklärung der Elektronenschalen K, L, M, N...
+        </div>
+
+        <div class="merksatz">
+            <p class="merksatz-placeholder">[Merksatz zur Schalenbesetzung, z.B. 2n²-Regel]</p>
+        </div>
+
+        <div class="aufgabe">
+            <p class="aufgabe-text">
+                <span class="aufgabe-nummer">3</span>
+                [Aufgabe zum Zeichnen von Bohrschen Atommodellen]
+            </p>
+            <button class="btn-loesung" onclick="toggleLoesung(this)">Lösung anzeigen</button>
+            <div class="aufgabe-loesung">
+                [Lösung mit Skizzen hier einfügen]
+            </div>
+        </div>
+
+        <div class="quiz" data-correct="a">
+            <p class="quiz-frage">[Frage zum Bohrschen Modell]</p>
+            <ul class="quiz-optionen">
+                <li><label><input type="radio" name="quiz3" value="a">[Option A - korrekt]</label></li>
+                <li><label><input type="radio" name="quiz3" value="b">[Option B]</label></li>
+                <li><label><input type="radio" name="quiz3" value="c">[Option C]</label></li>
+            </ul>
+            <button class="btn-check" onclick="checkQuiz(this)">Überprüfen</button>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="links">
+            <ul>
+                <li><a href="#">[Interaktive Animation: Bohr-Modell]</a></li>
+                <li><a href="#">[Video: Vom Rutherford zum Bohr-Modell]</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Kapitel 4 -->
+    <section class="chapter" id="kap4">
+        <h2>4. Elektronenkonfiguration</h2>
+        
+        <div class="content-placeholder">
+            Einführung zur Elektronenkonfiguration und Schreibweise...
+        </div>
+
+        <div class="formel">
+            [Beispiel: 1s² 2s² 2p⁶ 3s² 3p⁶]
+        </div>
+
+        <div class="content-placeholder">
+            Text zu Orbitalen (s, p, d, f) und deren Besetzung...
+        </div>
+
+        <div class="bild-placeholder">
+            Abbildung: Form der s-, p-, d-Orbitale
+        </div>
+
+        <div class="merksatz">
+            <p class="merksatz-placeholder">[Merksatz zu Aufbauprinzip, Pauli-Prinzip, Hund'sche Regel]</p>
+        </div>
+
+        <div class="aufgabe">
+            <p class="aufgabe-text">
+                <span class="aufgabe-nummer">4</span>
+                [Aufgabe: Elektronenkonfiguration verschiedener Elemente aufschreiben]
+            </p>
+            <button class="btn-loesung" onclick="toggleLoesung(this)">Lösung anzeigen</button>
+            <div class="aufgabe-loesung">
+                [Lösungen hier einfügen]
+            </div>
+        </div>
+
+        <div class="aufgabe">
+            <p class="aufgabe-text">
+                <span class="aufgabe-nummer">5</span>
+                [Weitere Aufgabe zur Elektronenkonfiguration]
+            </p>
+            <button class="btn-loesung" onclick="toggleLoesung(this)">Lösung anzeigen</button>
+            <div class="aufgabe-loesung">
+                [Lösung hier einfügen]
+            </div>
+        </div>
+
+        <div class="quiz" data-correct="b">
+            <p class="quiz-frage">[Frage zur Elektronenkonfiguration]</p>
+            <ul class="quiz-optionen">
+                <li><label><input type="radio" name="quiz4" value="a">[Option A]</label></li>
+                <li><label><input type="radio" name="quiz4" value="b">[Option B - korrekt]</label></li>
+                <li><label><input type="radio" name="quiz4" value="c">[Option C]</label></li>
+                <li><label><input type="radio" name="quiz4" value="d">[Option D]</label></li>
+            </ul>
+            <button class="btn-check" onclick="checkQuiz(this)">Überprüfen</button>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="merksatz">
+            <p class="merksatz-placeholder">[Zusammenfassender Merksatz zum Kapitel]</p>
+        </div>
+
+        <div class="links">
+            <ul>
+                <li><a href="#">[Orbital-Visualisierung]</a></li>
+                <li><a href="#">[Übungsaufgaben Elektronenkonfiguration]</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Kapitel 5 -->
+    <section class="chapter" id="kap5">
+        <h2>5. Das Periodensystem</h2>
+        
+        <div class="content-placeholder">
+            Aufbau des Periodensystems, Perioden und Gruppen...
+        </div>
+
+        <div class="bild-placeholder">
+            Abbildung: Periodensystem der Elemente
+        </div>
+
+        <div class="content-placeholder">
+            Zusammenhang zwischen Elektronenkonfiguration und Stellung im PSE...
+        </div>
+
+        <div class="merksatz">
+            <p class="merksatz-placeholder">[Merksatz: Zusammenhang Elektronen - PSE]</p>
+        </div>
+
+        <div class="content-placeholder">
+            Trends im Periodensystem (Atomradius, Elektronegativität, etc.)...
+        </div>
+
+        <div class="merksatz">
+            <p class="merksatz-placeholder">[Merksatz zu periodischen Trends]</p>
+        </div>
+
+        <div class="aufgabe">
+            <p class="aufgabe-text">
+                <span class="aufgabe-nummer">6</span>
+                [Aufgabe zum Periodensystem]
+            </p>
+            <button class="btn-loesung" onclick="toggleLoesung(this)">Lösung anzeigen</button>
+            <div class="aufgabe-loesung">
+                [Lösung hier einfügen]
+            </div>
+        </div>
+
+        <div class="quiz" data-correct="d">
+            <p class="quiz-frage">[Frage zum Periodensystem]</p>
+            <ul class="quiz-optionen">
+                <li><label><input type="radio" name="quiz5" value="a">[Option A]</label></li>
+                <li><label><input type="radio" name="quiz5" value="b">[Option B]</label></li>
+                <li><label><input type="radio" name="quiz5" value="c">[Option C]</label></li>
+                <li><label><input type="radio" name="quiz5" value="d">[Option D - korrekt]</label></li>
+            </ul>
+            <button class="btn-check" onclick="checkQuiz(this)">Überprüfen</button>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="links">
+            <ul>
+                <li><a href="#">[Interaktives Periodensystem]</a></li>
+                <li><a href="#">[Video: Trends im Periodensystem]</a></li>
+                <li><a href="#">[Periodensystem zum Ausdrucken]</a></li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <p>Chemie Grundlagenfach – Atombau</p>
+        <p>Version [Datum einfügen]</p>
+    </footer>
+
+    <script>
+        // Lösung ein-/ausblenden
+        function toggleLoesung(button) {
+            const loesung = button.nextElementSibling;
+            if (loesung.classList.contains('show')) {
+                loesung.classList.remove('show');
+                button.textContent = 'Lösung anzeigen';
+            } else {
+                loesung.classList.add('show');
+                button.textContent = 'Lösung verbergen';
+            }
+        }
+
+        // Multiple Choice überprüfen
+        function checkQuiz(button) {
+            const quiz = button.closest('.quiz');
+            const correctAnswer = quiz.dataset.correct;
+            const selected = quiz.querySelector('input[type="radio"]:checked');
+            const feedback = quiz.querySelector('.quiz-feedback');
+
+            if (!selected) {
+                feedback.textContent = 'Bitte wähle eine Antwort aus.';
+                feedback.className = 'quiz-feedback incorrect';
+                return;
+            }
+
+            if (selected.value === correctAnswer) {
+                feedback.textContent = '✓ Richtig!';
+                feedback.className = 'quiz-feedback correct';
+            } else {
+                feedback.textContent = '✗ Leider falsch. Versuche es nochmal!';
+                feedback.className = 'quiz-feedback incorrect';
+            }
+        }
+    </script>
+
+</body>
+</html>
